@@ -18,7 +18,7 @@ class ShowVideo(Thread):
         while(True):
             # Capture frame-by-frame
             frameWebcam = self.webcam.read()
-            frameWebcam = imutils.resize(frameWebcam, width=600)
+            frameWebcam = imutils.resize(frameWebcam, width=800)
             framePicam = self.picam.read()
             framePicam = imutils.resize(framePicam, width=600)
             # Our operations on the frame come here
