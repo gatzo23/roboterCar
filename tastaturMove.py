@@ -66,6 +66,7 @@ class TastaturMove(Thread):
         elif (self.key_char == curses.KEY_BACKSPACE):
           print("Stop Motoren")
           self.wheels.stopStep()
+        #Einschalten falls mal die Geschwindigkeitskontrolle funktioniert
         elif(self.key_char == "s"):
           print("langsam fahren")
           self.wheels.slowSpeed()
