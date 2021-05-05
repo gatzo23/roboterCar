@@ -10,14 +10,14 @@ from threading import Timer
 from threading import Thread
 from speak import Speak
 from wheels import Wheel
-from camera import Camera
+from stepper import Stepper
 
 class HandyMove(Thread):
     def __init__(self, dataFromClient, socketConnection):
         Thread.__init__(self)
         self.dataFromClient = dataFromClient
         self.komm_handy = socketConnection
-        self.motorCamera = Camera()
+        self.motorCamera = Stepper()
         self.wheels = Wheel()
         # angabe wie gerade gefahren wird. 0=halt 1=vorwärts 2=rückwärts 3=links 4=rechts
         self.richtung = 0

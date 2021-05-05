@@ -12,7 +12,7 @@ time.sleep(2.0)
 # loop over frames from the video streams
 while True:
     frame = webcam.read()
-    frame = imutils.resize(frame, width=400)
+    frame = imutils.resize(frame, width=800)
     frame1 = picam.read()
     frame1 = imutils.resize(frame1, width=400)
     # convert the frame to grayscale, blur it slightly, update

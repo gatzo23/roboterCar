@@ -1,55 +1,33 @@
 #Bibliotheken einbinden
 import RPi.GPIO as GPIO
 import time
+from threading import Thread
 from wheels import Wheel
+from autonomFunctions import AutonomFunctions
 
-class Distance:
+class Distance(Thread):
     def __init__(self):
-        #GPIO Modus (BOARD / BCM)
-        GPIO.setmode(GPIO.BCM)
-        #GPIO Pins zuweisen
-        self.GPIO_TRIGGER = 12
-        self.GPIO_ECHO = 7
-        #Richtung der GPIO-Pins festlegen (IN / OUT)
-        GPIO.setup(self.GPIO_TRIGGER, GPIO.OUT)
-        GPIO.setup(self.GPIO_ECHO, GPIO.IN)
-
-
-    def distanz(self):
-        # setze Trigger auf HIGH
-        GPIO.output(self.GPIO_TRIGGER, True)
-
-        # setze Trigger nach 0.01ms aus LOW
-        time.sleep(0.00001)
-        GPIO.output(self.GPIO_TRIGGER, False)
-
-        StartZeit = time.time()
-        StopZeit = time.time()
-
-        # speichere Startzeit
-        while GPIO.input(self.GPIO_ECHO) == 0:
-            StartZeit = time.time()
-
-        # speichere Ankunftszeit
-        while GPIO.input(self.GPIO_ECHO) == 1:
-            StopZeit = time.time()
-
-        # Zeit Differenz zwischen Start und Ankunft
-        TimeElapsed = StopZeit - StartZeit
-        # mit der Schallgeschwindigkeit (34300 cm/s) multiplizieren
-        # und durch 2 teilen, da hin und zurueck
-        distanz = (TimeElapsed * 34300) / 2
-
-        return distanz
+        Thread.__init__(self)
+        self.wheels = Wheel()
+        #Ultraschall GPIOs
+        self.GPIO_TRIGGER_Stat = 12
+        self.GPIO_ECHO_Stat = 7
+        #Setup GPIO Ultraschall
+        GPIO.setup(self.GPIO_TRIGGER_Stat, GPIO.OUT)
+        GPIO.setup(self.GPIO_ECHO_Stat, GPIO.IN)
+        #Thread starten
+        self.daemon = True
+        self.start()
 
     def run(self):
         try:
+            print("Distance gestartet")
             while True:
-                abstand = self.distanz()
-                print("Gemessene Entfernung = %.1f cm" % abstand)
+                abstand = AutonomFunctions().entfernung(self.GPIO_TRIGGER_Stat, self.GPIO_ECHO_Stat)
+                #print("Gemessene Entfernung = %.1f cm" % abstand)
                 if(abstand < 10.0):
-                    Wheel.stopStep()
-                time.sleep(1)
+                    self.wheels.stopStep()
+                time.sleep(0.5)
             # Beim Abbruch durch STRG+C resetten
         except KeyboardInterrupt:
             print("Messung vom User gestoppt")

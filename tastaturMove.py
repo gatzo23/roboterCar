@@ -4,14 +4,15 @@ import sys
 from threading import Thread
 from comExtern import CommunicationExtern
 from speak import Speak
-from camera import Camera
+from stepper import Stepper
 from wheels import Wheel
 
 class TastaturMove(Thread):
   def __init__(self):
     Thread.__init__(self)
     self.window = curses.initscr()
-    self.motorCamera = Camera()
+    #Klasse für die drei Schrittmotoren
+    self.stepperMotor = Stepper()
     self.wheels = Wheel()
     curses.noecho()
     self.window.keypad(True)
@@ -25,19 +26,19 @@ class TastaturMove(Thread):
         print(self.key_char)
         if (self.key_char == curses.KEY_LEFT):
           print("links")
-          self.motorCamera.forwardM1()
+          self.stepperMotor.forwardM1()
           Speak().voice("links")
         elif (self.key_char == curses.KEY_RIGHT):
           print("rechts")
-          self.motorCamera.backwardsM1()
+          self.stepperMotor.backwardsM1()
           Speak().voice("rechts")
         elif (self.key_char == curses.KEY_UP):
           print("hoch")
-          self.motorCamera.backwardsM2()
+          self.stepperMotor.backwardsM3()
           Speak().voice("hoch")
         elif (self.key_char == curses.KEY_DOWN):
           print("runter")
-          self.motorCamera.forwardM2()
+          self.stepperMotor.forwardM3()
           Speak().voice("runter")
         elif (self.key_char == curses.KEY_HOME):
           print("links fahren")
@@ -66,6 +67,11 @@ class TastaturMove(Thread):
         elif (self.key_char == curses.KEY_BACKSPACE):
           print("Stop Motoren")
           self.wheels.stopStep()
+          #sonic bewegen
+        elif (self.key_char == "r"):
+          self.stepperMotor.forwardSonic()
+        elif (self.key_char == "l"):
+          self.stepperMotor.backwardSonic()
         #Einschalten falls mal die Geschwindigkeitskontrolle funktioniert
         elif(self.key_char == "s"):
           print("langsam fahren")
@@ -84,4 +90,4 @@ class TastaturMove(Thread):
           break
     except Exception as e:
       print("es gab einen Fehler: ", e)
-      self.motorCamera.setStep0()
+      self.stepperMotor.setStep0()

@@ -71,7 +71,7 @@ class Wheel:
         GPIO.output(self.C2, GPIO.LOW)
 
     def rightStep(self):
-        print("links")
+        print("rechts")
         GPIO.output(self.A1, GPIO.LOW)
         GPIO.output(self.A2, GPIO.HIGH)
         GPIO.output(self.B1, GPIO.HIGH)
@@ -82,7 +82,7 @@ class Wheel:
         GPIO.output(self.C2, GPIO.HIGH)
 
     def leftStep(self):
-        print("rechts")
+        print("links")
         GPIO.output(self.A1, GPIO.HIGH)
         GPIO.output(self.A2, GPIO.LOW)
         GPIO.output(self.B1, GPIO.LOW)
@@ -123,6 +123,6 @@ class Wheel:
         self.p2.ChangeDutyCycle(75)
         self.p3.ChangeDutyCycle(75)
         self.p4.ChangeDutyCycle(75)
-        
+ 
     def cleanup(self):
         GPIO.cleanup()

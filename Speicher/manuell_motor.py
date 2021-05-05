@@ -12,7 +12,7 @@ GPIO.setup(servoPIN,GPIO.OUT)
 p = GPIO.PWM(servoPIN, 50) #GPIO 18 als PWM mit 50Hz
 p.start(2.5) #Initialisierung
 m = 2.5
-
+p.ChangeDutyCycle(0)
 try:
   while True:
     k = window.get_wch()
@@ -21,10 +21,16 @@ try:
       print("links")
       m = m - 2.5
       p.ChangeDutyCycle(m)
+      print(m)
+      time.sleep(0.5)
+      p.ChangeDutyCycle(0)
     elif (k == curses.KEY_RIGHT) and (m < 12.5):
       print("rechts")
       m = m + 2.5
       p.ChangeDutyCycle(m)
+      print(m)
+      time.sleep(0.5)
+      p.ChangeDutyCycle(0)
     else:
       curses.beep()
     curses.flushinp() #Cache Tasteninhalt löschen

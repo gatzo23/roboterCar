@@ -26,6 +26,8 @@ class ShowVideo(Thread):
         self.top_k = 3
         self.camera_idx = 0
         self.threshold = 0.1
+        self.out = cv2.VideoWriter('frontKamera.avi', cv2.VideoWriter_fourcc(
+            'M', 'J', 'P', 'G'), 10, (800, 420))
         
         self.daemon = True
         self.start()
@@ -52,17 +54,20 @@ class ShowVideo(Thread):
             objs = get_objects(interpreter, self.threshold)[:self.top_k]
             cv2_im = self.append_objs_to_img(
                 frameWebcam, inference_size, objs, readLabels)
-            time.sleep(0.5)
-
+            #Video in Datei schreiben
+            self.out.write(cv2_im)
+            #starten der Picam
             grayPicam = cv2.cvtColor(framePicam, cv2.COLOR_BGR2GRAY)
+            grayPicam = cv2.rotate(grayPicam, cv2.cv2.ROTATE_180)
             #grayPicam = cv2.GaussianBlur(grayPicam, (21, 21), 0)
             # Display the resulting frame
-            cv2.imshow("RobotFront", grayPicam)
-            cv2.imshow("RobotBack", cv2_im)
+            cv2.imshow("RobotBack", grayPicam)
+            cv2.imshow("RobotFront", cv2_im)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
         # When everything done, release the capture
+        self.out.release()
         cv2.destroyAllWindows()
         self.webcam.stop()
         self.picam.stop()
