@@ -15,8 +15,8 @@ class Autonom(Thread):
         self.GPIO_ECHO_Stat = 7
         GPIO.setup(self.GPIO_TRIGGER_Stat, GPIO.OUT)
         GPIO.setup(self.GPIO_ECHO_Stat, GPIO.IN)
-        self.GPIO_TRIGGER_Dyn = 15
-        self.GPIO_ECHO_Dyn = 14
+        self.GPIO_TRIGGER_Dyn = 3
+        self.GPIO_ECHO_Dyn = 2
         GPIO.setup(self.GPIO_TRIGGER_Dyn, GPIO.OUT)
         GPIO.setup(self.GPIO_ECHO_Dyn, GPIO.IN)
         self.daemon = True

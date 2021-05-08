@@ -80,7 +80,7 @@ class AutonomFunctions():
             self.wheels.backwardStep()
             time.sleep(1.0)
             self.wheels.stopStep()
-            self.checkClear(15, 14)
+            self.checkClear(3, 2)
 
         #Motor zurück in die Ausgangsposition bringen 
         self.sonicMotor.backwardSonic()
